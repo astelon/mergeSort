@@ -596,7 +596,7 @@ bool compareTestResults(size_t size, struct List *values, int32_t *expected){
  * \param values    Initial state of the integer list
  * \param expected  Expected final state for the integer list
  */
-bool runSortTest(int iteration, size_t size, SortFunction sortFunction, int32_t *values, int32_t *expected){
+void runSortTest(int iteration, size_t size, SortFunction sortFunction, int32_t *values, int32_t *expected){
     printf("\n-- Test %d --\n", iteration);
 
     resetComparisons();
@@ -618,15 +618,17 @@ bool runSortTest(int iteration, size_t size, SortFunction sortFunction, int32_t 
     if(size<100) integerListPrint(list);
     else printf("Too large to be printed\n");
 
-    bool result = compareTestResults(size, list, expected);
+    bool succeeded = compareTestResults(size, list, expected);
     listDestroy(list);
     printf("\nComparisons = %d\n",getComparisons());
 
-    printf("Condition: %s\n", result ? "PASSED" : "FAILED");
+    printf("Condition: %s\n", succeeded ? "PASSED" : "FAILED");
 
     printf("Resolved sort in %.3f seconds\n", cpu_time_used);
 
-    return result;
+    if(!succeeded){
+        abort();
+    }
 }
 
 #define TEST3_ARRAY_SIZE 100000
