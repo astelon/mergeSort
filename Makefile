@@ -5,20 +5,26 @@ INCLUDE_DIR = include
 
 SRC := src
 OBJ := obj
+BIN := bin
+
+HEADERS := $(wildcard $(INCLUDE_DIR)/*.h)
 SOURCES := $(wildcard $(SRC)/*.c)
 OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
+OUTPUT  := mergeSort
 
 .phony: clean
 .phony: test
 
 all: $(OBJECTS)
-	$(CC) $^ -o bin/mergeSort $(DEBUG_OPTIONS)
+	$(CC) $^ -o $(BIN)/$(OUTPUT) $(DEBUG_OPTIONS)
+	@mkdir -p $(BIN)
 
-$(OBJ)/%.o: $(SRC)/%.c
+$(OBJ)/%.o: $(SRC)/%.c $(HEADERS)
+	@mkdir -p $(OBJ)
 	$(CC) -I $(INCLUDE_DIR) -o $@ -c $< $(CFLAGS)
 
 clean:
-	@rm -f $(OBJS) bin/* obj/*
+	@rm -f $(OBJECTS) $(BIN)/*
 
-test: bin/mergeSort
-	./bin/mergeSort
+test: $(BIN)/$(OUTPUT)
+	./$(BIN)/$(OUTPUT)
