@@ -16,8 +16,8 @@ OUTPUT  := mergeSort
 .phony: test
 
 all: $(OBJECTS)
-	$(CC) $^ -o $(BIN)/$(OUTPUT) $(DEBUG_OPTIONS)
 	@mkdir -p $(BIN)
+	$(CC) $^ -o $(BIN)/$(OUTPUT) $(DEBUG_OPTIONS)
 
 $(OBJ)/%.o: $(SRC)/%.c $(HEADERS)
 	@mkdir -p $(OBJ)
