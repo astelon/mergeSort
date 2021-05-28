@@ -21,24 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-/***************************  Utils  ******************************/
-/**
- * \brief Reserve memory blocks of a given size or abort on failure.
- * \param count Memory blocks to reserve
- * \param size  Size of every memory block
- * \return      A pointer to the allocated memory block.
- */
-void *xzalloc(size_t count, size_t size){
-    /* calloc initializes the new memory to 0  so there is no need to
-     * explicitly do it here */
-    void *ptr = calloc(count, size);
-    if(ptr == NULL){
-        fprintf(stderr, "Error: Failed to reserve memory");
-        abort();
-    }
-    return ptr;
-}
+#include "utils.h"
 
 /*************************** Generic List ******************************/
 
