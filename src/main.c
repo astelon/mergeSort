@@ -22,87 +22,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "list.h"
+#include "integer_list.h"
 #include "utils.h"
-
-/*************************** Integer List ******************************/
-/**
- * \brief Creates a Integer List Node with a given value
- * \param value Value to initialize the node.
- * \return      A pointer to the created node.
- */
-struct ListNode *integerListNodeCreate(int32_t value){
-    int32_t *ptr = (int32_t *)xzalloc(1,sizeof(int32_t));
-    *ptr = value;
-    struct ListNode *node = listNodeCreate(ptr);
-    return node;
-}
-
-/**
- * \brief Adds an integer to the begining of the list
- * \param list  The list to be modified
- * \param value Value to be added to the list
- * \return      RET_OK if it was successful or RET_FAIL on a failure.
- */
-enum ListReturnType integerListAppendStart(struct List *list, int32_t value){
-    if(list == NULL) return RET_FAIL;
-    struct ListNode *node = integerListNodeCreate(value);
-    return listAppendStart(list, node);
-}
-
-/**
- * \brief Adds an integer to the end of the list
- * \param list  The list to be modified
- * \param value Value to be added to the list
- * \return      RET_OK if it was successful or RET_FAIL on a failure.
- */
-enum ListReturnType integerListAppendEnd(struct List *list, int32_t value){
-    if(list == NULL) return RET_FAIL;
-    struct ListNode *node = integerListNodeCreate(value);
-    return listAppendEnd(list,node);
-}
-
-void integerListFreeNode(struct ListNode *node){
-    free(node->value);
-    free(node);
-}
-
-/**
- * \brief Creates an Integer List and Initializes it with a set of values
- * \param count    Amount of elements to be added to the new list
- * \param elements Elements to be added to the list
- * \return         A pointer to a new list containing the given elements
- */
-struct List* integerListCreateWithElements(size_t count, int32_t elements[]) {
-    struct List *list = listCreate(integerListFreeNode);
-    for(size_t i=0; i<count; i++) {
-        integerListAppendEnd(list, elements[i]);
-    }
-    return list;
-}
-
-/**
- * \brief Print an element of an Integer List
- * \param value Pointer to the value to be printed
- * \param fmt   Pointer to a c string used as format to print the element.
- */
-bool integerListPrintElement(void *value, void *fmt) {
-    if((value == NULL) || (fmt == NULL)){
-        return false;
-    }
-    int32_t *ivalue = (int32_t *)value;
-    printf((const char*)fmt, *ivalue);
-    return true;
-}
-
-/**
- * \brief Print all elements in an integer List
- * \param list List to be printed
- */
-void integerListPrint(struct List *list){
-    printf("[");
-    listForEach(list, integerListPrintElement," %d ");
-    printf("]\n");
-}
 
 /*************************** Sort ******************************/
 
