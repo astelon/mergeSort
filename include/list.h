@@ -5,6 +5,7 @@
 #ifndef __LIST_H__
 #define __LIST_H__
 #include <stdbool.h>
+#include <stdlib.h>
 
 enum ListReturnType {
     RET_OK,
