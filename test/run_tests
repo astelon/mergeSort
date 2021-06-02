@@ -1,0 +1,17 @@
+#! /bin/bash
+
+DIR=$1
+
+echo "-I- Running UTs ..."
+
+for test in `ls $DIR/test_*`; do
+    echo "-I- Running $test ..."
+    $test
+    CODE=$?
+    echo "-I- Exit code = $CODE"
+    if [ $CODE -ne 0 ]; then
+        exit $CODE;
+    fi
+done
+
+exit 0;

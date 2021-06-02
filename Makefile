@@ -1,30 +1,39 @@
 CC = gcc
-DEBUG_OPTIONS = -O0 -g -fsanitize=address
+AR := ar -rcs
+DEBUG_OPTIONS = -O3
 CFLAGS = -Wall $(DEBUG_OPTIONS)
 INCLUDE_DIR = include
 
 SRC := src
 OBJ := obj
-BIN := bin
+LIB := lib
+TST := test
 
 HEADERS := $(wildcard $(INCLUDE_DIR)/*.h)
 SOURCES := $(wildcard $(SRC)/*.c)
+TESTS   := $(wildcard $(TST)/*.c)
+TESTS_BIN := $(patsubst $(TST)/%.c, $(TST)/out/%, $(TESTS)) 
 OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
-OUTPUT  := mergeSort
+OUTPUT  := libmergesort.a
 
 .phony: clean
 .phony: test
 
 all: $(OBJECTS)
-	@mkdir -p $(BIN)
-	$(CC) $^ -o $(BIN)/$(OUTPUT) $(DEBUG_OPTIONS)
+	@mkdir -p $(LIB)
+	$(AR) $(LIB)/$(OUTPUT) $^
 
 $(OBJ)/%.o: $(SRC)/%.c $(HEADERS)
 	@mkdir -p $(OBJ)
 	$(CC) -I $(INCLUDE_DIR) -o $@ -c $< $(CFLAGS)
 
 clean:
-	@rm -f $(OBJECTS) $(BIN)/*
+	@rm -f $(OBJECTS) $(LIB)/*
+	@rm -rf $(TST)/out
 
-test: $(BIN)/$(OUTPUT)
-	./$(BIN)/$(OUTPUT)
+$(TST)/out/%: $(TST)/%.c
+	@mkdir -p $(TST)/out
+	$(CC) -I $(INCLUDE_DIR) -o $@ $< $(CFLAGS) --static -L $(LIB) -lmergesort
+
+test: $(TESTS_BIN)
+	./$(TST)/run_tests ./$(TST)/out
